@@ -1,0 +1,15 @@
+services:
+  app:
+    container_name: hotel_manager
+    restart: always
+    build: ./Hotel_App
+    ports:
+      - '80:5000'
+    links:
+      - mongo
+  mongo:
+    container_name: MongoDB
+    image: mongo
+    ports:
+      - '27017:27017'
+

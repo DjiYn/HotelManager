@@ -3,8 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV PORT=8080 DB_URL="mongodb://localhost:27017/hotel"
+ENV PORT=5000 DB_URL="mongodb://mongo:27017/hotel"
 
-EXPOSE 8080
+EXPOSE 5000
 
 CMD ["npm", "start"]
