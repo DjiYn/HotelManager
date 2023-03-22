@@ -9,7 +9,7 @@ services:
       - mongo
   mongo:
     container_name: MongoDB
-    image: mongo
+    image: mongo:4
     volumes:
       - ./database:/data/db
     ports:
