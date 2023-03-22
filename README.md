@@ -18,6 +18,8 @@ Instructions:
 
 ## API
 
+Service works on port 80.
+
 ### Users
 
 #### GET request
