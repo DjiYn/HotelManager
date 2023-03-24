@@ -6,8 +6,9 @@ module.exports.addRoom = async (req, res) => {
 
         const addedRoom = new HotelRooms({roomName, roomPrice});
         await addedRoom.save();
-        res.send(`Successfully added new Room: ${roomName}`);
+        res.send(addedRoom);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 }
@@ -17,6 +18,7 @@ module.exports.getAllRooms = async (req, res) => {
         const allRooms = await HotelRooms.find({});
         res.send(`The list of all rooms: \n ${allRooms}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 
@@ -26,6 +28,7 @@ module.exports.getAllEmptyRooms = async (req, res) => {
         const allRooms = await HotelRooms.find({occupiedBy: []});
         res.send(`The list of all empty rooms: \n ${allRooms}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 
@@ -40,6 +43,7 @@ module.exports.bookARoom = async (req, res) => {
         roomToBook.save();
         res.send(`Room was booked by user: \n ${roomToBook} \n ${userID}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 
@@ -53,6 +57,7 @@ module.exports.makeRoomEmpty = async (req, res) => {
         roomToEmpty.save();
         res.send(`Room was emptied: \n ${roomToEmpty}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 
@@ -63,6 +68,7 @@ module.exports.deleteRoom = async (req, res) => {
         const roomToEmpty = await HotelRooms.findByIdAndDelete(id);
         res.send(`Room was deleted: \n ${roomToEmpty}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 
@@ -73,6 +79,7 @@ module.exports.getEmptyRoom = async (req, res) => {
         const roomToEmpty = await HotelRooms.findById(id, {occupiedBy: []});
         res.send(`Room's information: \n ${roomToEmpty}`);
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 } 

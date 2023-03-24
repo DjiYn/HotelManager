@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MongoDB!
 const mongoose = require("mongoose");
+mongoose.set("debug", false);
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/hotel";
 mongoose.connect(dbUrl);

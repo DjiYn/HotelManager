@@ -5,8 +5,16 @@ module.exports.registerUser = async (req, res) => {
         const {Name, Surname} = req.body;
         const registeredUser = new Users({Name, Surname});
         await registeredUser.save();
-        res.send(`Successfully registered: ${Name}, ${Surname}`);
+        
+        if(user === null){
+            res.status(404);
+            res.send(user);
+        } else {
+            res.status(201);
+            res.send(registeredUser);
+        }
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 };
@@ -16,8 +24,16 @@ module.exports.updateUser = async (req, res) => {
         const {id} = req.params;
         const {Name, Surname} = req.body;
         const user = await Users.findByIdAndUpdate( id, {Name, Surname} );
-        res.send(`Successfully updated: ${id} -> ${Name}, ${Surname}`);
+        
+        if(user === null){
+            res.status(404);
+            res.send(user);
+        } else {
+            res.status(201);
+            res.send(user);
+        }
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 };
@@ -26,8 +42,16 @@ module.exports.deleteUser = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await Users.findByIdAndDelete( id );
-        res.send(`Successfully deleted user: ${id}`);
+        if(user === null){
+            res.status(404);
+            res.send(user);
+        } else {
+            res.status(200);
+            res.send(user);
+        }
+        
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 };
@@ -36,8 +60,15 @@ module.exports.getUser = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await Users.findById( id );
-        res.send(`User's data by ID: ${user.Name}, ${user.Surname}`);
+        if(user === null){
+            res.status(404);
+            res.send(user);
+        } else {
+            res.status(200);
+            res.send(user);
+        }
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 };
@@ -45,8 +76,15 @@ module.exports.getUser = async (req, res) => {
 module.exports.getUsers = async (req, res) => {
     try {
         const users = await Users.find( {} );
-        res.send(`User's data by ID: \n ${users}`);
+        if(users === null){
+            res.status(404);
+            res.send(users);
+        } else {
+            res.status(200);
+            res.send(users);
+        }
     } catch (e) {
+        res.status(400);
         res.send(e.message);
     }
 };
