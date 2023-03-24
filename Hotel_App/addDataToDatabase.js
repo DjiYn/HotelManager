@@ -1,4 +1,5 @@
-
+const Users = require('./models/users');
+const HotelRooms = require('./models/hotelRooms');
 
 // Connect to MongoDB!
 const mongoose = require("mongoose");
@@ -9,24 +10,31 @@ mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log("Database connected!");
-});
+db.once('open', () => {console.log("Database connected to seed with fake data!");});
 
-async function seedDatabase () {
-    db.users.insertMany([
-        {"Name": "Jay", "Surname": "Smith" },
-        {"Name": "Will", "Surname": "Smith" },
-        {"Name": "Mike", "Surname": "Walausky" }
-    ]);
-    
-    db.rooms.insertMany([
-        {"roomName": "VIP", "roomPrice": "1000.00 EUR" },
-        {"roomName": "MEDIUM", "roomPrice": "555.00 EUR" },
-        {"roomName": "LOW", "roomPrice": "111.00 EUR" },
-    ]);
 
-    console.log("Database seeded!");
+const seedDatabase = async () => {
+    try {
+        await Users.deleteMany({});
+        await Users.insertMany([
+            {"Name": "Jay", "Surname": "Smith" },
+            {"Name": "Will", "Surname": "Smith" },
+            {"Name": "Mike", "Surname": "Walausky" }
+        ]);
+        await HotelRooms.deleteMany({});
+        await HotelRooms.insertMany([
+            {"roomName": "VIP", "roomPrice": "1000.00 EUR" },
+            {"roomName": "MEDIUM", "roomPrice": "555.00 EUR" },
+            {"roomName": "LOW", "roomPrice": "111.00 EUR" },
+        ]);
+        console.log("Database seeded!");
+        db.close();
+        console.log("Database disconnected!");
+    } catch (err) {
+        console.log("Database could not be seeded!");
+        console.log(err);
+    }
 }
 
-await seedDatabase();
+seedDatabase();
+

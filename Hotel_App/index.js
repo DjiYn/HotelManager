@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 8080;
+const host = process.env.HOST || "localhost";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,4 +36,4 @@ app.use("/rooms", roomRoutes);
 
 
 
-app.listen(port, () => console.log(`app listening on http://localhost:${port}`));
+app.listen(port, () => console.log(`Web service is listening on http://${host}:${port}`));

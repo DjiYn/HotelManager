@@ -3,9 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV PORT=5000 DB_URL="mongodb://mongo:27017/hotel"
+ENV PORT=80 DB_URL="mongodb://mongo:27017/hotel" HOST="localhost"
 
-EXPOSE 5000
+EXPOSE 80
 
-CMD ["node", "addDataToDatabase.js"]
 CMD ["npm", "start"]
