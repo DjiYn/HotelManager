@@ -113,7 +113,7 @@ module.exports.deleteRoom = async (req, res) => {
 module.exports.getEmptyRoom = async (req, res) => {
     try {
         const {id} = req.params;
-        const roomToEmpty = await HotelRooms.findById(id, {occupiedBy: []});
+        const roomToEmpty = await HotelRooms.findById(id);
         if(roomToEmpty === null || roomToEmpty.length === 0) {
             res.status(404);
             res.send();
