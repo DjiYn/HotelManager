@@ -29,7 +29,7 @@ const seedDatabase = async () => {
         ]);
         console.log("Database seeded!");
         db.close();
-        console.log("Database disconnected!");
+        console.log("Seeder disconnected from database!");
     } catch (err) {
         console.log("Database could not be seeded!");
         console.log(err);
