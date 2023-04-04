@@ -35,5 +35,12 @@ const roomRoutes = require("./routes/hotelRooms");
 app.use("/rooms", roomRoutes);
 
 
+app.all("*", (req, res, handlers) => {
+    var method = req.route.method;
+    if (!(method in handlers)) {
+        res.send(501);
+    }
+})
+
 
 app.listen(port, () => console.log(`Web service is listening on http://${host}:${port}`));

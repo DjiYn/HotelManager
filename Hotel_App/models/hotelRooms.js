@@ -12,7 +12,7 @@ const hotelRoomsSchema = new mongoose.Schema({
     occupiedBy: [
         {
             type: mongoose.SchemaTypes.ObjectId,
-            ref: "User"
+            ref: "Users"
         }
     ],
     lastEdited: {

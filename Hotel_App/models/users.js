@@ -9,6 +9,12 @@ const UserSchema = new Schema({
     Surname: {
         type: String,
         required: true,
-    }
+    },
+    BookedRooms: [
+        {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Rooms"
+        }
+    ]
 });
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Users", UserSchema);

@@ -11,5 +11,9 @@ router.route("/:id")
     .put(users.updateUser)
     .delete(users.deleteUser);
 
+router.route("/:id/rooms")
+    .get(users.getAllBookedRooms)
+    .put(users.bookRoomForUser)
+    .delete(users.unbookRooms);
 
 module.exports = router;

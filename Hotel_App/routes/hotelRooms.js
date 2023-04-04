@@ -6,15 +6,18 @@ router.route("/")
     .get(hotelRooms.getAllRooms)
     .post(hotelRooms.addRoom);
 
-router.route("/available")
+router.route("/empty")
     .get(hotelRooms.getAllEmptyRooms);
 
-router.route("/available/:id")
-    .get(hotelRooms.getEmptyRoom)
-    .put(hotelRooms.bookARoom);
 
 router.route("/:id")
-    .put(hotelRooms.makeRoomEmpty)
+    .get(hotelRooms.getRoom)
     .delete(hotelRooms.deleteRoom);
+
+router.route("/:id/users")
+    .get(hotelRooms.getAllUsersInRoom)
+    .put(hotelRooms.bookARoom)
+    .delete(hotelRooms.makeRoomEmpty);
+
 
 module.exports = router;
