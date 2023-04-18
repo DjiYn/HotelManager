@@ -1,6 +1,23 @@
 const Users = require('../models/users');
 const HotelRooms = require('../models/hotelRooms');
 
+module.exports.getUsers = async (req, res) => {
+    try {
+        const users = await Users.find( {} );
+        if(users === null || users.length === 0) {
+            res.status(404);
+            res.send();
+        } else {
+            res.status(200);
+            res.send(users);
+        }
+    } catch (e) {
+        res.status(400);
+        res.send(e.message);
+    }
+};
+
+
 module.exports.getUser = async (req, res) => {
     try {
         const {id} = req.params;
@@ -11,22 +28,6 @@ module.exports.getUser = async (req, res) => {
         } else {
             res.status(200);
             res.send(user);
-        }
-    } catch (e) {
-        res.status(400);
-        res.send(e.message);
-    }
-};
-
-module.exports.getUsers = async (req, res) => {
-    try {
-        const users = await Users.find( {} );
-        if(users === null || users.length === 0) {
-            res.status(404);
-            res.send();
-        } else {
-            res.status(200);
-            res.send(users);
         }
     } catch (e) {
         res.status(400);
@@ -78,23 +79,31 @@ module.exports.deleteUser = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await Users.findByIdAndDelete( id );
+
+        if(user === null || user.length === 0)
+            throw new Error("No such userID exists to be deleted!");
+
+        for(let bookedRoom of user.BookedRooms) {
+            let room = await HotelRooms.findById(bookedRoom);
+
+            let remainingUsers = [];
+
+            for(let usersInRoom of room.occupiedBy) {
+                if(usersInRoom != id)
+                    remainingUsers.push = usersInRoom;
+            }
+            room.occupiedBy = remainingUsers;
+            room.lastEdited = Date.now();
+            
+            room.save();
+        }
+
+
+
         if(user === null || user.length === 0) {
             res.status(404);
             res.send();
         } else {
-            for(let i = 0; i < user.BookedRooms.length; i++) {
-                let room = await HotelRooms.findById(user.BookedRooms[i]);
-
-                let remainingUsers = [];
-                for(let j = 0; j < room.occupiedBy.length; j++) {
-                    if(room.occupiedBy[j] != user.id)
-                        remainingUsers.push = room.occupiedBy[j];
-                }
-                room.occupiedBy = remainingUsers;
-                room.save();
-            }
-            
-
             res.status(200);
             res.send(user);
         }
@@ -106,17 +115,18 @@ module.exports.deleteUser = async (req, res) => {
 };
 
 
+// :id/rooms route
+
 
 module.exports.getAllBookedRooms = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await Users.findById( id ).populate({path: 'BookedRooms'});
+
         if(user === null || user.length === 0) {
             res.status(404);
             res.send();
-
         } else {
-
             res.status(200);
             res.send(user.BookedRooms);
         }
@@ -143,9 +153,7 @@ module.exports.bookRoomForUser = async (req, res) => {
         
         const user = await Users.findById(id);
         user.BookedRooms.push(roomID);
-        
         user.save();
-        user.populate({path: 'BookedRooms'});
 
         room.occupiedBy.push(user.id);
         room.lastEdited = Date.now();
@@ -155,8 +163,8 @@ module.exports.bookRoomForUser = async (req, res) => {
             res.status(404);
             res.send();
         } else {
-            res.status(201);
-            res.set("Content-Location", req.originalUrl);
+            res.status(200);
+            res.set("Content-Location", req.baseUrl + "/" + id);
             res.send(user);
         }
     } catch (e) {
@@ -171,35 +179,33 @@ module.exports.unbookRooms = async (req, res) => {
         const {id} = req.params;
 
         const user = await Users.findById(id);
+        
+        
+        
+
+        for(let bookedRoom of user.BookedRooms) {
+            let room = await HotelRooms.findById(bookedRoom);
+
+
+            let remainingUsers = [];
+            for(let usersInRoom of room.occupiedBy) {
+                if(usersInRoom != id)
+                    remainingUsers.push = usersInRoom;
+            }
+            room.occupiedBy = remainingUsers;
+            room.lastEdited = Date.now();
+            room.save();
+        }
+
+        user.BookedRooms = [];
+        user.save();
+
 
         if(user === null || user.length === 0) {
             res.status(404);
             res.send();
 
         } else {
-
-            const roomsBooked = [...user.BookedRooms];
-
-            user.BookedRooms = [];
-            
-            user.save();
-
-            for(let i = 0; i < roomsBooked.length; i++) {
-                let room = await HotelRooms.findById(roomsBooked[i]);
-                if(room == null)
-                    throw new Error("No such room exist!");
-
-                let remainingUsers = [];
-                for(let j = 0; j < room.occupiedBy.length; j++) {
-                    if(room.occupiedBy[j] != user.id)
-                        remainingUsers.push(room.occupiedBy[j]);
-                }
-                room.occupiedBy = remainingUsers;
-                room.lastEdited = Date.now();
-                room.save();
-            }
-
-
             res.status(200);
             res.send(user.BookedRooms);
         }

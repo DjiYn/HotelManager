@@ -6,10 +6,6 @@ router.route("/")
     .get(hotelRooms.getAllRooms)
     .post(hotelRooms.addRoom);
 
-router.route("/empty")
-    .get(hotelRooms.getAllEmptyRooms);
-
-
 router.route("/:id")
     .get(hotelRooms.getRoom)
     .delete(hotelRooms.deleteRoom);
