@@ -35,6 +35,12 @@ Returns user by their ID.
 URI: /users/64197f89c47f17d076421261
 ```
 
+Returns user's booked rooms by their ID.
+
+```
+URI: /users/64197f89c47f17d076421261/rooms
+```
+
 #### PUT request
 
 Updates user's information.
@@ -46,6 +52,18 @@ Body:
     {
         "Name": "Peter", 
         "Surname": "Smith" 
+    }
+```
+
+Books a room for a user.
+
+```
+URI: /users/64197f89c47f17d076421261/rooms
+```
+
+Body:
+    {
+        "roomID": "643eeb9baa987d1229d8789c"
     }
 ```
 
@@ -71,6 +89,12 @@ Deletes user from database.
 URI: /users/64197f89c47f17d076421261
 ```
 
+Removes all booked rooms from user
+
+```
+URI: /users/64197f89c47f17d076421261/rooms
+```
+
 ### Hotel Rooms
 
 #### GET request
@@ -81,30 +105,30 @@ Returns a list of all rooms in database.
 URI: /rooms
 ```
 
-Returns all available rooms in database.
-
-```
-URI: /rooms/available
-```
-
-Returns an available room by its ID.
-
-```
-URI: /rooms/available/64197f89c47f17d076421261
-```
-
-#### PUT request
-
-Makes room available for booking.
+Returns a room by its ID.
 
 ```
 URI: /rooms/64197f89c47f17d076421261
 ```
 
-Books an available room for a user.
+Returns user's that booked room by its ID.
 
 ```
-URI: /rooms/available/64197f89c47f17d076421261
+URI: /rooms/64197f89c47f17d076421261/users
+```
+
+#### PUT request
+
+Removes all users from room.
+
+```
+URI: /rooms/64197f89c47f17d076421261
+```
+
+Books a room for a user.
+
+```
+URI: /rooms/64197f89c47f17d076421261/users
 
 Body:
     {
