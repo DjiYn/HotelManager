@@ -134,7 +134,7 @@ module.exports.bookARoom = async (req, res) => {
         user.BookedRooms.push(roomToBook.id);
         user.save();
 
-        if(roomToBook === null || roomToBook.length === 0) {
+        if(roomToBook == null || roomToBook.length == 0) {
             res.status(404);
             res.send();
         } else {

@@ -22,12 +22,26 @@ module.exports.getUser = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await Users.findById( id );
+
+        const {expand} = req.query;
+        
+        
+
         if(user === null || user.length === 0) {
             res.status(404);
             res.send();
         } else {
             res.status(200);
-            res.send(user);
+            if(!expand)
+                res.send(user);
+            else {
+                if(expand == "rooms")
+                    res.send(user.BookedRooms);
+                else
+                    throw new Error("Wrong query!");
+            }
+            
+            
         }
     } catch (e) {
         res.status(400);
